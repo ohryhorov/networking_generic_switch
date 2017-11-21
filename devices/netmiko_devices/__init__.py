@@ -173,10 +173,23 @@ class NetmikoSwitch(devices.GenericSwitchDevice):
                                   port=port,
                                   segmentation_id=segmentation_id))
 
-    def create_port_channel(self, port_channel_id):
+    def create_port_channel(self, port_id, vlan_id):
         self.send_commands_to_device(
             self._format_commands(self.CREATE_PORT_CHANNEL,
-                                  port_channel_id=port_channel_id))
+                                  port_id=port_id,
+                                  vlan_id=vlan_id))
+    
+    def configure_port_channel(self, port, port_number_id, vlan_id):
+        self.send_commands_to_device(
+            self._format_commands(self.CONFIGURE_PORT,
+                                  port=port, 
+                                  port_number_id=port_number_id,
+                                  vlan_id=vlan_id))
+    
+    def vlan_configuration(self, vlan_id):
+        self.send_commands_to_device(
+            self._format_commands(self.VLAN_CONFIGURATION,
+                                  vlan_id=vlan_id))
     
     def show_port_list(self):
         try:

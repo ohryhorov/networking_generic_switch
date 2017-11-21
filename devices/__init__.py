@@ -86,7 +86,7 @@ class GenericSwitchDevice(object):
         pass
     
     @abc.abstractmethod
-    def create_port_channel(self, port_channel_id):
+    def create_port_channel(self, port_id, vlan_id):
         pass
     
     @abc.abstractmethod

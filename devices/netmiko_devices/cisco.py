@@ -43,15 +43,23 @@ class CiscoIos(netmiko_devices.NetmikoSwitch):
         )
         
         CREATE_PORT_CHANNEL = (
-            'interface {port_channel_id}',
+            'interface {port_id}',
+            'switchport trunk native vlan {vlan_id}',
+            'switchport access vlan {vlan_id}'
         )
 
         CONFIGURE_PORT = (
             'interface {port}',
             'no shutdown',
-            'channel-group {port_channel_id} mode on'
+            'channel-group {port_number_id} mode on',
+            'switchport access vlan {vlan_id}',
+            'switchport trunk native vlan {vlan_id}'
         )
         
         SHOW_PORT_LIST = (
             'show run | inc Port-channel'
+        )
+
+        VLAN_CONFIGURATION = (
+            'vlan {vlan_id}',
         )

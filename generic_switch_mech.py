@@ -22,6 +22,8 @@ from networking_generic_switch import config as gsw_conf
 from networking_generic_switch import devices
 from networking_generic_switch.devices import utils as device_utils
 
+import re
+
 LOG = logging.getLogger(__name__)
 
 GENERIC_SWITCH_ENTITY = 'GENERICSWITCH'
@@ -447,12 +449,16 @@ class GenericSwitchDriver(driver_api.MechanismDriver):
                           segmentation_id=segmentation_id))
             # If a request to create dynamic group is arrived
             if (len(local_link_information) > 1):
-                switch_id_count = local_link_information[0]
-                switch_id_count1 = local_link_information[1]
-                LOG.debug("switch_id {switch_id_count}".format(switch_id_count=switch_id_count))
-                LOG.debug("switch_id1 {switch_id_count1}".format(switch_id_count1=switch_id_count1))
-                output = switch.create_port_channel(local_group_information.get('name'))
-                LOG.debug("YYY: {output}".format(output=output))
+                #output = switch.create_port_channel(local_group_information.get('name'),segmentation_id)
+                switch.vlan_configuration(segmentation_id)
+                switch.create_port_channel(local_group_information.get('name'),segmentation_id)
+                port_number_id = re.sub('.*?([0-9]*)$',r'\1',local_group_information.get('name'))
+                #output = switch.create_port_channel(segmentation_id)
+                LOG.debug("YYY: {port_number_id}".format(port_number_id=port_number_id))
+                for item in local_link_information:
+                    i = item.get('port_id')
+                    LOG.debug("XXX: {output}".format(output=i)) 
+                    switch.configure_port_channel(i,port_number_id,segmentation_id) 
                 #port_list = switch.show_port_list().splitlines()
                 #port_list = [w.replace('interface Port-channel', '') for w in port_list]
                 #for item in port_list:
